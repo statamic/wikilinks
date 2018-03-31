@@ -16,7 +16,6 @@ content_field: It's been a long time since I've seen [Jerry].
 ```
 
 ```
-# Template
 {{ content_field | markdown | wikilinks }}
 ```
 
@@ -28,7 +27,7 @@ content_field: It's been a long time since I've seen [Jerry].
 
 By default Wikilinks will match by the `title` field, but you can pass another field as a parameter. Be sure to choose a field that exists in your search index.
 
-Example:
+**Example:**
 ```
 {{ content_field | markdown | wikilinks:author }}
 ```

@@ -2,8 +2,8 @@
 
 namespace Statamic\Wikilinks\Modifiers;
 
-use Statamic\Facades\Entry;
 use Illuminate\Support\Arr;
+use Statamic\Facades\Entry;
 use Statamic\Modifiers\Modifier;
 
 class WikilinksModifier extends Modifier
@@ -13,9 +13,9 @@ class WikilinksModifier extends Modifier
     /**
      * Maps to {{ var | wikilinks }}
      *
-     * @param mixed  $value    The value to be modified
-     * @param array  $params   Any parameters used in the modifier
-     * @param array  $context  Contextual values
+     * @param  mixed  $value  The value to be modified
+     * @param  array  $params  Any parameters used in the modifier
+     * @param  array  $context  Contextual values
      * @return mixed
      */
     public function index($value, $params, $context)
@@ -25,21 +25,24 @@ class WikilinksModifier extends Modifier
         preg_match_all("/\[([^\]]*)\]/", $value, $matches);
 
         $replacements = [];
+        $field = Arr::get($params, 0, 'title');
+        $collection = Arr::get($params, 1, false);
 
-        $field = data_get($params, 0, 'title');
+        foreach ($matches[1] as $index => $query) {
+            $result = Entry::query()->where($field, $query);
 
-        foreach($matches[1] as $index => $query) {
-            $result = Entry::query()
-                        ->where($field, $query)
-                        ->first();
+            if ($collection) {
+                $result = $result->where('collection', $collection);
+            }
 
             if ($result) {
-
-                $uri = $result->uri;
-
+                $uri = $result->first()?->uri;
                 $replacements[] = ($uri) ? "<a href='{$uri}' title='{$query}'>{$query}</a>" : $query;
+            } else {
+                $replacements[] = $matches[0][$index];
             }
         }
+
         return str_replace($matches[0], $replacements, $value);
     }
 }

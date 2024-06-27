@@ -1,11 +1,12 @@
 ## Installing
 
-- Install by copying the files into `site/addons/Wikilinks`.
-- That's it.
+```
+composer require statamic/wikilinks
+```
 
 ## Usage
 
-Wikilinks is a simple modifier that seeks out any content wrapped in [braces] and automatically links it to other entries or pages with the same title (or other field of your choosing).
+Wikilinks provides a simple modifier that seeks out any content wrapped in [braces] and automatically links it to other entries or pages with the same title (or other field of your choosing).
 
 ### Example
 

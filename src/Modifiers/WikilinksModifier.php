@@ -1,12 +1,15 @@
 <?php
 
-namespace Statamic\Addons\Wikilinks;
-use Statamic\API\Search;
-use Statamic\API\Content;
-use Statamic\Extend\Modifier;
+namespace Statamic\Wikilinks\Modifiers;
+
+use Statamic\Facades\Entry;
+use Illuminate\Support\Arr;
+use Statamic\Modifiers\Modifier;
 
 class WikilinksModifier extends Modifier
 {
+    protected static $handle = 'wikilinks';
+
     /**
      * Maps to {{ var | wikilinks }}
      *
@@ -23,15 +26,18 @@ class WikilinksModifier extends Modifier
 
         $replacements = [];
 
-        $field = array_get($params, 0, 'title');
+        $field = data_get($params, 0, 'title');
 
         foreach($matches[1] as $index => $query) {
-            if ($result = Search::get($query, [$field])) {
+            $result = Entry::query()
+                        ->where($field, $query)
+                        ->first();
 
-                $id = array_get($result->first(), 'id');
-                $url = Content::find($id)->url();
+            if ($result) {
 
-                $replacements[] = ($url) ? "<a href='{$url}'>{$query}</a>" : $query;
+                $uri = $result->uri;
+
+                $replacements[] = ($uri) ? "<a href='{$uri}' title='{$query}'>{$query}</a>" : $query;
             }
         }
         return str_replace($matches[0], $replacements, $value);

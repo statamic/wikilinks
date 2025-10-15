@@ -5,16 +5,8 @@
             "Statamic\\Wikilinks\\": "src"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Statamic\\Wikilinks\\Tests\\": "tests"
-        }
-    },
     "require": {
         "statamic/cms": "^5.0"
-    },
-    "require-dev": {
-        "orchestra/testbench": "^9.0"
     },
     "config": {
         "allow-plugins": {

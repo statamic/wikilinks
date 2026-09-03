@@ -8,11 +8,6 @@
     "require": {
         "statamic/cms": "^5.0 || ^6.0"
     },
-    "config": {
-        "allow-plugins": {
-            "pixelfear/composer-dist-plugin": true
-        }
-    },
     "extra": {
         "statamic": {
             "name": "Wikilinks",
